@@ -6,32 +6,22 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+env: #globales
+    NODE_VERSION: "22.21.1"
+    APP_NAME: "cron-ticker-v2"
 
 jobs:
-  run-test:
-    name: Run Tests
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+        env:
+            BUILD_DIR: dist
 
-      - name: Set up Node.js 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22.21.1'
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Instalar Dependencies
-        run: npm ci
-
-      - name: Run Tests
-        run: npm run test
-
-      - name: Coverage
-        run: npm run test:coverage
-
-      - name: Linter
-        run: npm run lint
-
-      - name: Build
-        run: npm run build
+            - name: show variables
+              run: |
+                echo "APP: ${{ env.APP_NAME }}"
+                echo "NODE: ${{ env.NODE_VERSION }}"
+                
