@@ -37,6 +37,9 @@ jobs:
       - name: show github variables
         run: |
           echo "APP: ${{ vars.APP_VERSION }}"
+      - name: show github Secrets
+        run: |
+          echo "Secret: ${{secrets.API_KEY}}"
 
       - name: Build
         run: npm run build
