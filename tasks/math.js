@@ -1,4 +1,4 @@
-/**
+ /**
  * Módulo de utilidades matemáticas
  * Agregado para tener más funciones que testear en GitHub Actions
  */
@@ -21,7 +21,7 @@ const getGreeting = (name) => {
     if (!name || typeof name !== 'string') {
         throw new Error('Se requiere un nombre válido');
     }
-    return `Hola, ${name}!`;
+    return `Hola ${name}!`;
 };
 
 const divide = (a, b) => {
