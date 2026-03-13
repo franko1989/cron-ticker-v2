@@ -15,6 +15,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      BUILD_DIR: dist
+
     steps:
       - uses: actions/checkout@v4
 
@@ -26,10 +29,16 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Show variables
+      - name: show variables
         run: |
           echo "APP: ${{ env.APP_NAME }}"
           echo "NODE: ${{ env.NODE_VERSION }}"
 
+      - name: show github variables
+        run: |
+          echo "APP: ${{ vars.APP_VERSION }}"
+
       - name: Build
         run: npm run build
+        env:
+          APP_VERSION: ${{ vars.APP_VERSION }}
