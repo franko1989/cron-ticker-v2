@@ -7,34 +7,30 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-env: # Globales
+env:
   NODE_VERSION: "22.21.1"
   APP_NAME: "cron-ticker-v2"
 
 jobs:
 
-  #-----------job 1 LINT----------------
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - run: npm ci
-
-      - name: Run Test with coverage
-        run: npm run test:coverage
-
-      - name: Coverage Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-${{ github.sha }}
-          path: coverage/
-          retention-days: 5
+    #-----------job 3 LINT----------------
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                 node-version: ${{ env.NODE_VERSION }}
+                 cache: 'npm'
+            - run: npm ci
+            - name: Build App
+              run: npm run build
+              env:
+                APP_VERSION: ${{ vars.APP_VERSION || '1.0.0' }}
+            - name: Upload Build Artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                name: build-${{github.sha}}
+                path: dist/
+                retention-days: 5 
