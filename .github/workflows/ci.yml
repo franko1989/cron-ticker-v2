@@ -7,49 +7,34 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-env:
+env: # Globales
   NODE_VERSION: "22.21.1"
   APP_NAME: "cron-ticker-v2"
 
 jobs:
-    #-----------job 1 LINT----------------
-    lint:
-        name: Lint
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                node-version: ${{ env.NODE_VERSION }}
-                cache: 'npm'
-            - run: npm ci
-            - run: npm run lint
-    #-----------job 2 LINT----------------
-    test:
-        name: Test
-        runs-on: ubuntu-latest
-        needs: lint
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                node-version: ${{ env.NODE_VERSION }}
-                cache: 'npm'
-            - run: npm ci
-            - name: Run tests with coverage
-              run: npm run test:coverage
-    #-----------job 3 LINT----------------
-    build:
-        name: Build
-        runs-on: ubuntu-latest
-        needs: test
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-            - uses: actions/setup-node@v4
-              with:
-                node-version: ${{ env.NODE_VERSION }}
-                cache: 'npm'
-            - run: npm ci
-            - run: npm run build
-   
+
+  #-----------job 1 LINT----------------
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Run Test with coverage
+        run: npm run test:coverage
+
+      - name: Coverage Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ github.sha }}
+          path: coverage/
+          retention-days: 5
